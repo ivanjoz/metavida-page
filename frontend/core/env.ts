@@ -2,6 +2,10 @@ import { browser } from '$app/environment';
 
 export { browser };
 
+const TOKEN_KEY = 'metavida-token';
+const TOKEN_EXP_KEY = 'metavida-token-exp';
+const USER_KEY = 'metavida-user';
+
 const makeAbsoluteRoute = (baseRoute: string, route: string) => {
   // Normalize app-relative API paths so shared Genix helpers can call one route builder.
   if (route.startsWith('http')) return route;
@@ -11,6 +15,15 @@ const makeAbsoluteRoute = (baseRoute: string, route: string) => {
 const makeCDNRoute = (...segments: string[]) => {
   // Shared image components pass path fragments; empty CDN means local/static paths.
   return segments.filter(Boolean).join('/').replaceAll('//', '/');
+};
+
+// Returns 0 (SSR), 2 (logged in), or 3 (not logged in) — matches Genix convention.
+export const checkIsLogin = (): number => {
+  if (!browser) return 0;
+  const token = localStorage.getItem(TOKEN_KEY);
+  const exp = parseInt(localStorage.getItem(TOKEN_EXP_KEY) || '0');
+  if (!token || !exp || Math.floor(Date.now() / 1000) > exp) return 3;
+  return 2;
 };
 
 export const Env = {
@@ -28,8 +41,20 @@ export const Env = {
   screen: browser ? window.screen : { height: -1, width: -1 },
   language: browser ? window.navigator?.language || '' : '',
   deviceMemory: browser ? (window.navigator as Navigator & { deviceMemory?: number }).deviceMemory || 0 : 0,
-  clearAccesos: null as (() => void) | null,
-  getToken: () => browser ? localStorage.getItem('metavida-token') || '' : '',
+  clearAccesos: (() => {
+    if (!browser) return;
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(TOKEN_EXP_KEY);
+    localStorage.removeItem(USER_KEY);
+    window.location.href = '/login';
+  }) as (() => void) | null,
+  getToken: () => browser ? localStorage.getItem(TOKEN_KEY) || '' : '',
+  setSession: (token: string, expTime: number, userInfo: string) => {
+    if (!browser) return;
+    localStorage.setItem(TOKEN_KEY, token);
+    localStorage.setItem(TOKEN_EXP_KEY, String(expTime));
+    localStorage.setItem(USER_KEY, userInfo);
+  },
   canUserAccessRoute: (_routeValue?: string | null) => true,
   getPathname: () => browser ? window.location.pathname : '',
   getCompanyID: () => 0,

@@ -72,12 +72,13 @@ const logWithPrefix = (prefix, data) => {
   }
 };
 
-const startProcess = ({ name, prefix, command, args, cwd }) => {
+const startProcess = ({ name, prefix, command, args, cwd, env }) => {
   console.log(`${colors.system} Starting ${name}: ${command} ${args.join(' ')}`);
   const child = spawn(command, args, {
     cwd,
     shell: isWindows,
-    stdio: ['ignore', 'pipe', 'pipe']
+    stdio: ['ignore', 'pipe', 'pipe'],
+    ...(env ? { env } : {})
   });
 
   child.stdout.on('data', (data) => logWithPrefix(prefix, data));
@@ -104,7 +105,8 @@ const main = () => {
       prefix: colors.backend,
       command: 'go',
       args: ['run', '.'],
-      cwd: path.join(ROOT, 'backend')
+      cwd: path.join(ROOT, 'backend'),
+      env: { ...process.env, METAVIDA_CREDENTIALS: path.join(ROOT, 'credentials.json') }
     })
   ];
 

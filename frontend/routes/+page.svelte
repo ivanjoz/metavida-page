@@ -2,85 +2,46 @@
   import {
     ArrowRight,
     CalendarDays,
-    FlaskConical,
     HandHeart,
     HeartPulse,
     Landmark,
-    Menu,
-    MessageCircle,
+    Mail,
+    Phone,
+    Send,
     ShieldCheck,
-    UsersRound,
-    X
+    UsersRound
   } from 'lucide-svelte';
+  import SiteHeader from './SiteHeader.svelte';
+  import { posts, programs, supportActions, surveys, values } from './page.content';
 
-  let mobileMenuOpen = $state(false);
+  let contactName = $state('');
+  let contactEmail = $state('');
+  let contactPhone = $state('');
+  let contactSubject = $state('');
+  let contactMessage = $state('');
 
-  const navItems = [
-    { label: 'Inicio', href: '#inicio' },
-    { label: 'Encuestas', href: '#encuestas' },
-    { label: 'Noticias', href: '#noticias' },
-    { label: 'Admin', href: '/admin' }
-  ];
+  function submitContactForm() {
+    // Use mailto until the backend contact endpoint exists; logs make form behavior traceable in pre-alpha.
+    console.debug('Submitting public contact form', {
+      contactName,
+      contactEmail,
+      contactPhone,
+      contactSubject,
+      hasMessage: contactMessage.trim().length > 0
+    });
 
-  const pillars = [
-    {
-      title: 'Impulsar',
-      text: 'La investigación y la innovación de oncología',
-      icon: FlaskConical
-    },
-    {
-      title: 'Crear',
-      text: 'Redes de soporte para pacientes y familias',
-      icon: UsersRound
-    },
-    {
-      title: 'Incentivar',
-      text: 'La cooperación con organismos internacionales',
-      icon: HandHeart
-    },
-    {
-      title: 'Desarrollar',
-      text: 'Programas de educación, concientización y nutrición oncológica',
-      icon: MessageCircle
-    }
-  ];
+    const emailBody = [
+      `Nombre: ${contactName}`,
+      `Email: ${contactEmail}`,
+      `Telefono: ${contactPhone}`,
+      '',
+      contactMessage
+    ].join('\n');
 
-  const surveys = [
-    {
-      label: 'Encuesta',
-      title: 'Toxicidad Financiera y Calidad de Vida',
-      text:
-        'Participe en nuestra encuesta sobre toxicidad financiera y calidad de vida. Los costos asociados al cuidado de la salud pueden generar una carga económica y emocional significativa para pacientes y familias.',
-      image: '/images/metavida/encuesta_toxi1.jpg',
-      href: 'https://metavida.life/encuestatf/'
-    },
-    {
-      label: 'Encuesta',
-      title: 'Conociendo Nuestra Realidad',
-      text:
-        'Esta encuesta busca conocer la situación real que enfrentan los pacientes en el Perú, especialmente en el acceso a tratamientos, historias clínicas y apoyo recibido.',
-      image: '/images/metavida/encuesta_paciente.jpg',
-      href: 'https://metavida.life/encuestarp/'
-    }
-  ];
-
-  const posts = [
-    {
-      title: 'Avances en Inmunoterapia: Nueva Esperanza Contra el Cáncer de Cabeza y Cuello',
-      image: '/images/metavida/uero111-890x660.jpg',
-      href: 'https://www.metavida.life/whats-the-reason-so-many-older-adults-arent-active/noticias/'
-    },
-    {
-      title: 'Avances Globales en la Investigación del Cáncer: Nuevas Terapias y Desafíos Persistentes',
-      image: '/images/metavida/dem111-890x660.jpg',
-      href: 'https://www.metavida.life/the-most-important-ventilator-equipment-available/noticias/'
-    },
-    {
-      title: 'El Poder de la Anticipación: Cómo el Tamizaje y la Prevención Están Cambiando la Lucha Contra el Cáncer',
-      image: '/images/metavida/prevencion-890x660.jpg',
-      href: 'https://www.metavida.life/blood-cancers-early-signs-symptoms-institute/noticias/'
-    }
-  ];
+    const encodedSubject = encodeURIComponent(contactSubject || 'Contacto desde MetaVida');
+    const encodedBody = encodeURIComponent(emailBody);
+    window.location.href = `mailto:informes@metavida.life?subject=${encodedSubject}&body=${encodedBody}`;
+  }
 </script>
 
 <svelte:head>
@@ -92,42 +53,7 @@
 </svelte:head>
 
 <main class="min-h-screen bg-[#eef7ff] text-[#102a57]">
-  <header class="fixed inset-x-0 top-0 z-40 border-b border-white/20 bg-[#0b2246]/82 backdrop-blur-md">
-    <div class="mx-auto flex h-82 w-[min(1180px,calc(100%-32px))] items-center justify-between">
-      <a href="#inicio" class="flex items-center gap-12" aria-label="MetaVida inicio">
-        <img src="/images/metavida/logo.svg" alt="MetaVida" class="h-46 w-auto max-w-[178px]" />
-      </a>
-
-      <nav class="hidden items-center gap-30 text-sm font-semibold uppercase leading-[1.2] text-white/88 md:flex">
-        {#each navItems as item}
-          <a class="transition hover:text-[#70b8ff]" href={item.href}>{item.label}</a>
-        {/each}
-      </nav>
-
-      <button
-        class="grid h-42 w-42 place-items-center rounded-[6px] border border-white/30 text-white md:hidden"
-        type="button"
-        aria-label="Abrir menu"
-        onclick={() => (mobileMenuOpen = !mobileMenuOpen)}
-      >
-        {#if mobileMenuOpen}
-          <X size={21} />
-        {:else}
-          <Menu size={21} />
-        {/if}
-      </button>
-    </div>
-
-    {#if mobileMenuOpen}
-      <nav class="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-4 pb-18 text-sm font-semibold uppercase leading-[1.2] text-white md:hidden">
-        {#each navItems as item}
-          <a class="rounded-[6px] px-12 py-10 hover:bg-white/10" href={item.href} onclick={() => (mobileMenuOpen = false)}>
-            {item.label}
-          </a>
-        {/each}
-      </nav>
-    {/if}
-  </header>
+  <SiteHeader />
 
   <section
     id="inicio"
@@ -145,11 +71,11 @@
       <p class="max-w-max rounded-full border border-white/28 bg-white/14 px-16 py-8 text-sm font-semibold uppercase leading-[1.2] text-[#d7ecff] shadow-[0_14px_34px_rgba(4,24,55,0.18)]">
         MetaVida
       </p>
-      <h1 class="max-w-[920px] text-[44px] font-semibold leading-[1.03] text-white md:text-[76px] lg:text-[96px]">
+      <h1 class="max-w-[900px] text-[42px] font-semibold leading-[1.03] text-white [text-shadow:0_4px_24px_rgba(0,0,0,0.55)] md:text-[68px] lg:text-[84px]">
         Uniendo esfuerzos por <span class="text-[#8cc9ff]">el bienestar y la salud.</span>
       </h1>
       <div class="flex max-w-[820px] flex-col gap-24 md:flex-row md:items-center md:justify-between">
-        <p class="max-w-[590px] text-lg leading-[1.55] text-white/86 md:text-xl">
+        <p class="max-w-[590px] text-lg leading-[1.55] text-white/90 [text-shadow:0_3px_16px_rgba(0,0,0,0.5)] md:text-xl">
           Una comunidad enfocada en investigación, soporte a pacientes, educación y prevención oncológica en el Perú.
         </p>
         <a
@@ -163,17 +89,137 @@
     </div>
   </section>
 
-  <section class="relative z-10 -mt-54">
-    <div class="mx-auto grid w-[min(1180px,calc(100%-32px))] overflow-hidden rounded-[28px] border border-white bg-white shadow-[0_24px_80px_rgba(18,64,111,0.14)] md:grid-cols-4">
-      {#each pillars as pillar}
-        {@const Icon = pillar.icon}
-        <article class="flex min-h-152 gap-16 border-b border-[#dbe9f7] p-24 last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0">
-          <div class="grid h-48 w-48 shrink-0 place-items-center rounded-full bg-[#e8f4ff] text-[#176fbc]">
-            <Icon size={24} />
+  <section class="bg-[#edf4fb] py-92">
+    <div class="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-42 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+      <div>
+        <p class="text-[30px] font-semibold leading-tight text-[#16bf7e] md:text-[38px]">Acompañando con ciencia</p>
+        <h2 class="mt-6 max-w-[520px] text-[44px] font-bold uppercase leading-[0.98] text-[#0784a7] md:text-[66px]">
+          Esperanza y humanidad
+        </h2>
+        <div class="mt-16 h-5 w-54 bg-[#18c682]"></div>
+      </div>
+
+      <div class="grid gap-28">
+        <article class="grid gap-18 border-b border-[#18c682] pb-28 md:grid-cols-[80px_1fr]">
+          <div class="grid h-72 w-72 place-items-center text-[#0784a7]">
+            <HandHeart size={62} strokeWidth={1.7} />
           </div>
-          <div>
-            <h2 class="text-xl font-bold leading-[1.2] text-[#102a57]">{pillar.title}</h2>
-            <p class="mt-8 text-sm leading-[1.45] text-[#71819b]">{pillar.text}</p>
+          <p class="text-xl leading-[1.55] text-[#1d2a39]">
+            <strong>MetaVida nace para acompañar a personas</strong> que enfrentan el cáncer y otras enfermedades complejas, junto a sus familias y cuidadores.
+          </p>
+        </article>
+        <article class="grid gap-18 md:grid-cols-[80px_1fr]">
+          <div class="grid h-72 w-72 place-items-center text-[#0784a7]">
+            <UsersRound size={60} strokeWidth={1.7} />
+          </div>
+          <p class="text-xl leading-[1.55] text-[#1d2a39]">
+            <strong>Creemos que nadie debería atravesar una enfermedad difícil en soledad.</strong> Por eso brindamos orientación, apoyo humano, educación e investigación para mejorar la calidad de vida de quienes más lo necesitan.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="valores" class="bg-[linear-gradient(180deg,#008c96_0%,#082a54_100%)] py-86 text-white">
+    <div class="mx-auto w-[min(1180px,calc(100%-32px))]">
+      <div class="mb-50 text-center">
+        <h2 class="text-[40px] font-bold uppercase leading-tight md:text-[64px]">Nuestros valores</h2>
+        <div class="mx-auto mt-14 h-5 w-42 bg-[#18c682]"></div>
+      </div>
+
+      <div class="grid gap-30 md:grid-cols-3">
+        {#each values as value}
+          {@const Icon = value.icon}
+          <article class="flex flex-col items-center gap-24 text-center">
+            <div class="grid h-86 w-86 place-items-center rounded-full border-2 border-[#18c682] text-[#18c682]">
+              <Icon size={38} strokeWidth={1.7} />
+            </div>
+            <div>
+              <h3 class="text-xl font-bold uppercase leading-tight">{value.title}</h3>
+              <p class="mt-8 text-base leading-[1.45] text-white/78">{value.text}</p>
+            </div>
+          </article>
+        {/each}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-96">
+    <div class="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-42 lg:grid-cols-[0.86fr_1fr] lg:items-center">
+      <div>
+        <h2 class="max-w-[520px] text-[44px] font-bold uppercase leading-[1.02] text-[#0784a7] md:text-[62px]">
+          <span class="text-[#18c682]">¿A quiénes</span> acompañamos?
+        </h2>
+        <div class="mt-14 h-5 w-42 bg-[#18c682]"></div>
+        <div class="mt-34 grid gap-22 text-lg leading-[1.65] text-[#27384a]">
+          <p>
+            Acompañamos a pacientes oncológicos, personas con enfermedades crónicas complejas, sobrevivientes de cáncer, familiares, cuidadores y personas en situación de vulnerabilidad.
+          </p>
+          <p>
+            También trabajamos con profesionales de la salud, universidades, investigadores, voluntarios, donantes e instituciones aliadas.
+          </p>
+        </div>
+      </div>
+
+      <img
+        src="/images/metavida/encuesta_paciente.jpg"
+        alt="Equipo de salud acompañando a pacientes"
+        class="min-h-360 w-full rounded-[8px] object-cover shadow-[0_22px_58px_rgba(21,72,128,0.12)]"
+      />
+    </div>
+  </section>
+
+  <section id="programas" class="bg-white pb-96">
+    <div class="mx-auto w-[min(1180px,calc(100%-32px))]">
+      <div class="mb-44 text-center">
+        <h2 class="text-[40px] font-bold uppercase leading-tight text-[#0784a7] md:text-[64px]">
+          Nuestros <span class="text-[#18c682]">programas</span>
+        </h2>
+        <div class="mx-auto mt-14 h-5 w-42 bg-[#18c682]"></div>
+      </div>
+
+      <div class="grid gap-18 md:grid-cols-2 lg:grid-cols-3">
+        {#each programs as program}
+          <article class="relative min-h-286 overflow-hidden rounded-[8px] bg-[#f0f2f5] shadow-[0_14px_36px_rgba(21,72,128,0.08)]">
+            {#if program.image}
+              <img src={program.image} alt="" class="absolute inset-0 h-full w-full object-cover" />
+              <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,23,48,0)_34%,rgba(4,39,72,0.9)_100%)]"></div>
+            {:else}
+              {@const Icon = program.icon}
+              <div class="absolute inset-x-0 top-54 flex justify-center text-[#0a7192]">
+                <Icon size={64} strokeWidth={1.5} />
+              </div>
+            {/if}
+            <div class="absolute inset-x-0 bottom-0 p-22 {program.image ? 'text-white' : 'text-[#102a57]'}">
+              <h3 class="text-xl font-bold uppercase leading-tight text-[#0784a7] {program.image ? '!text-white' : ''}">
+                {program.title}
+              </h3>
+              <div class="mt-4 h-3 w-34 bg-[#18c682]"></div>
+              <p class="mt-8 text-base leading-[1.45] {program.image ? 'text-white/88' : 'text-[#27384a]'}">
+                {program.text}
+              </p>
+            </div>
+          </article>
+        {/each}
+      </div>
+    </div>
+  </section>
+
+  <section id="apoyo" class="bg-[#eef4fb] py-84">
+    <div class="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-22 md:grid-cols-2">
+      {#each supportActions as action}
+        <article class="grid gap-22 rounded-[8px] bg-white p-12 shadow-[0_14px_36px_rgba(21,72,128,0.11)] md:grid-cols-[minmax(190px,0.9fr)_1fr] md:items-center">
+          <img src={action.image} alt="" class="h-220 w-full rounded-[6px] object-cover md:h-full" />
+          <div class="p-12 md:p-20">
+            <h3 class="text-2xl font-bold uppercase leading-tight text-[#075f80]">{action.title}</h3>
+            <div class="mt-4 h-3 w-34 bg-[#18c682]"></div>
+            <p class="mt-10 text-base leading-[1.55] text-[#27384a]">{action.text}</p>
+            <a
+              href={action.href}
+              class="mt-18 inline-flex h-40 items-center justify-center rounded-[6px] bg-[#075f80] px-16 text-sm font-bold !text-white transition hover:bg-[#18a878]"
+            >
+              Quiero saber más
+            </a>
           </div>
         </article>
       {/each}
@@ -215,7 +261,7 @@
     </div>
   </section>
 
-  <section class="bg-[#0b2246] py-78 text-white">
+  <section class="bg-[#17375f] py-78 text-white">
     <div class="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-24 md:grid-cols-3">
       <div class="flex gap-16">
         <HeartPulse class="mt-4 text-[#8cc9ff]" size={30} />
@@ -266,6 +312,126 @@
           </article>
         {/each}
       </div>
+    </div>
+  </section>
+
+  <section id="contactenos" class="bg-[#eef4fb] py-92">
+    <div class="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-30 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
+      <div class="grid gap-22">
+        <div>
+          <p class="max-w-max rounded-full bg-white px-22 py-9 text-sm font-bold uppercase leading-[1.2] text-[#2e7dd7] shadow-[0_10px_28px_rgba(21,72,128,0.08)]">
+            Contactenos
+          </p>
+          <h2 class="mt-18 text-[36px] font-bold leading-tight text-[#102a57] md:text-[54px]">
+            Escríbenos y conversemos
+          </h2>
+          <p class="mt-16 max-w-[520px] text-lg leading-[1.65] text-[#596a82]">
+            Completa el formulario o usa los datos directos de contacto para coordinar apoyo, alianzas, voluntariado o donaciones.
+          </p>
+        </div>
+
+        <div class="grid gap-14">
+          <a
+            href="mailto:informes@metavida.life"
+            class="grid gap-14 rounded-[8px] border border-[#dbeaf8] bg-white p-20 shadow-[0_12px_30px_rgba(21,72,128,0.07)] md:grid-cols-[52px_1fr]"
+          >
+            <span class="grid h-48 w-48 place-items-center rounded-[8px] bg-[#e8fff5] text-[#128b65]">
+              <Mail size={24} />
+            </span>
+            <span>
+              <span class="block text-sm font-bold uppercase leading-[1.2] text-[#8ba0b8]">Escribenos</span>
+              <span class="mt-4 block text-lg font-bold leading-tight text-[#075f80]">informes@metavida.life</span>
+            </span>
+          </a>
+
+          <a
+            href="tel:+51945364062"
+            class="grid gap-14 rounded-[8px] border border-[#dbeaf8] bg-white p-20 shadow-[0_12px_30px_rgba(21,72,128,0.07)] md:grid-cols-[52px_1fr]"
+          >
+            <span class="grid h-48 w-48 place-items-center rounded-[8px] bg-[#e8fff5] text-[#128b65]">
+              <Phone size={24} />
+            </span>
+            <span>
+              <span class="block text-sm font-bold uppercase leading-[1.2] text-[#8ba0b8]">Llamanos</span>
+              <span class="mt-4 block text-lg font-bold leading-tight text-[#075f80]">(+51) 945 364 062</span>
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <form
+        class="grid gap-16 rounded-[8px] bg-white p-22 shadow-[0_22px_52px_rgba(21,72,128,0.11)] md:p-30"
+        onsubmit={(event) => {
+          event.preventDefault();
+          submitContactForm();
+        }}
+      >
+        <div class="grid gap-16 md:grid-cols-2">
+          <label class="grid gap-7">
+            <span class="text-sm font-bold uppercase leading-[1.2] text-[#596a82]">Tu Nombre *</span>
+            <input
+              class="h-48 rounded-[6px] border border-[#d3e1ef] bg-[#f8fcff] px-14 text-base text-[#102a57] outline-none transition focus:border-[#18a878] focus:bg-white"
+              name="name"
+              required
+              autocomplete="name"
+              bind:value={contactName}
+            />
+          </label>
+
+          <label class="grid gap-7">
+            <span class="text-sm font-bold uppercase leading-[1.2] text-[#596a82]">Tu Email *</span>
+            <input
+              class="h-48 rounded-[6px] border border-[#d3e1ef] bg-[#f8fcff] px-14 text-base text-[#102a57] outline-none transition focus:border-[#18a878] focus:bg-white"
+              name="email"
+              type="email"
+              required
+              autocomplete="email"
+              bind:value={contactEmail}
+            />
+          </label>
+        </div>
+
+        <div class="grid gap-16 md:grid-cols-2">
+          <label class="grid gap-7">
+            <span class="text-sm font-bold uppercase leading-[1.2] text-[#596a82]">Tu Teléfono *</span>
+            <input
+              class="h-48 rounded-[6px] border border-[#d3e1ef] bg-[#f8fcff] px-14 text-base text-[#102a57] outline-none transition focus:border-[#18a878] focus:bg-white"
+              name="phone"
+              type="tel"
+              required
+              autocomplete="tel"
+              bind:value={contactPhone}
+            />
+          </label>
+
+          <label class="grid gap-7">
+            <span class="text-sm font-bold uppercase leading-[1.2] text-[#596a82]">Asunto</span>
+            <input
+              class="h-48 rounded-[6px] border border-[#d3e1ef] bg-[#f8fcff] px-14 text-base text-[#102a57] outline-none transition focus:border-[#18a878] focus:bg-white"
+              name="subject"
+              bind:value={contactSubject}
+            />
+          </label>
+        </div>
+
+        <label class="grid gap-7">
+          <span class="text-sm font-bold uppercase leading-[1.2] text-[#596a82]">Mensaje *</span>
+          <textarea
+            class="min-h-150 resize-y rounded-[6px] border border-[#d3e1ef] bg-[#f8fcff] p-14 text-base text-[#102a57] outline-none transition focus:border-[#18a878] focus:bg-white"
+            name="message"
+            required
+            bind:value={contactMessage}
+          ></textarea>
+        </label>
+
+        <button
+          type="submit"
+          class="inline-flex h-52 w-max items-center justify-center gap-10 rounded-[6px] bg-[#075f80] px-22 text-base font-bold text-white transition hover:bg-[#18a878]"
+        >
+          Enviar
+          <Send size={18} />
+        </button>
+      </form>
     </div>
   </section>
 
