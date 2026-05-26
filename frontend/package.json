@@ -24,6 +24,18 @@
     "vite": "^8.0.0"
   },
   "dependencies": {
-    "lucide-svelte": "^0.468.0"
+    "@humanspeak/svelte-virtual-list": "^0.3.5",
+    "@jsquash/avif": "^2.1.1",
+    "axios": "^1.13.2",
+    "billboard.js": "^3.14.3",
+    "date-fns": "^4.1.0",
+    "dexie": "^4.2.0",
+    "dompurify": "^3.4.2",
+    "excelize-wasm": "^0.1.1",
+    "lucide-svelte": "^0.468.0",
+    "normalize-html-whitespace": "^1.0.0",
+    "notiflix": "^3.2.8",
+    "pdfjs-dist": "^5.4.394",
+    "svelte-awesome-color-picker": "^4.1.0"
   }
 }

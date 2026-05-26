@@ -20,6 +20,7 @@ const config = {
     },
     alias: {
       $core: path.resolve('./core'),
+      $components: path.resolve('./ui-components'),
       $libs: path.resolve('./libs'),
       $routes: path.resolve('./routes')
     }
@@ -27,4 +28,3 @@ const config = {
 };
 
 export default config;
-

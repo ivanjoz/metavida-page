@@ -93,6 +93,7 @@ The frontend is a SvelteKit app located in the `frontend/` directory. It has two
 Shared utilities live in `frontend/core/` and `frontend/libs/`.
 
 ## Frontend Rules
+- Use Bun for frontend dependency installs and scripts. Do not use npm for this project.
 - Use `untrack` inside `$effect` to avoid render loops.
 - Tailwind `--spacing` is 1px. So `h-4` is actually 4px.
 - NEVER use `font-weight` or `font-size` in a CSS class. USE Tailwind instead.
