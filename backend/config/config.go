@@ -12,11 +12,12 @@ type Config struct {
 	HTTPAddr             string `json:"HTTP_ADDR"`
 	FrontendOrigin       string `json:"FRONTEND_ORIGIN"`
 	CloudProvider        string `json:"CLOUD_PROVIDER"`
-	CloudflareAccountID  string `json:"CLOUDFLARE_ACCOUNT_ID"`
-	CloudflareAPIToken   string `json:"CLOUDFLARE_API_TOKEN"`
+	CloudflareAccountID  string `json:"CLOUDFLARE_ACCOUNT"`
+	CloudflareAPIToken   string `json:"CLOUDFLARE_TOKEN"`
 	CloudflareDatabaseID string `json:"CLOUDFLARE_DATABASE_ID"`
 	AdminEmail           string `json:"ADMIN_EMAIL"`
 	AdminPassword        string `json:"ADMIN_PASSWORD"`
+	SecretPhrase         string `json:"SECRET_PHRASE"`
 }
 
 func Load() (Config, error) {
