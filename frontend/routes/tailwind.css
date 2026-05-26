@@ -1,0 +1,27 @@
+@import 'tailwindcss';
+
+@theme {
+	--spacing: 1px;
+	--breakpoint-2xl: 1539px;
+	--breakpoint-xl: 1379px;
+	--breakpoint-lg: 1139px;
+	--breakpoint-md: 749px;
+	--font-size-xs: 14px;
+	--font-size-sm: 15px;
+	--font-size-base: 16px;
+	--font-size-lg: 18px;
+	--font-size-xl: 20px;
+	--font-size-2xl: 22px;
+	--leading-tight: 1.2;
+	--font-weight-semibold: 600;
+}
+
+@layer utilities {
+	.font-semibold {
+		font-weight: 600;
+	}
+
+	.font-bold {
+		font-weight: 700;
+	}
+}

@@ -1,0 +1,10 @@
+credentials.json
+node_modules/
+frontend/node_modules/
+frontend/.svelte-kit/
+frontend/build/
+backend/metavida-backend
+backend/tmp/
+*.log
+
+frontend/old_page/_.__MetaVida__.._files/

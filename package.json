@@ -1,0 +1,16 @@
+{
+  "name": "metavida-page",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Metavida public site and CRM scaffold",
+  "scripts": {
+    "dev": "node start.js",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "go run ./backend",
+    "build": "npm --prefix frontend run build && go build -o backend/metavida-backend ./backend",
+    "check": "npm --prefix frontend run check && go test ./backend/..."
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
