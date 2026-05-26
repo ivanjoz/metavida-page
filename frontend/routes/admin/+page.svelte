@@ -1,15 +1,19 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { GET } from '$libs/http';
 
   let status = $state('Cargando...');
 
-  GET('/health')
-    .then((res) => {
-      status = res.status || 'ok';
-    })
-    .catch((err) => {
-      status = err.message;
-    });
+  onMount(() => {
+    // Run the health check in the browser so SSR does not eagerly call the backend.
+    GET('/health')
+      .then((res) => {
+        status = res.status || 'ok';
+      })
+      .catch((err) => {
+        status = err.message;
+      });
+  });
 </script>
 
 <section>
@@ -62,4 +66,3 @@
     }
   }
 </style>
-

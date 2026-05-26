@@ -4,7 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite dev --force --host 0.0.0.0 --port 3571",
+    "dev": "vite dev --host 0.0.0.0 --port 3571",
+    "dev:clean": "vite dev --force --host 0.0.0.0 --port 3571",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0 --port 4174",
     "prepare": "svelte-kit sync || true",
