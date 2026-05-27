@@ -18,6 +18,12 @@ type Config struct {
 	AdminEmail           string `json:"ADMIN_EMAIL"`
 	AdminPassword        string `json:"ADMIN_PASSWORD"`
 	SecretPhrase         string `json:"SECRET_PHRASE"`
+	AWSUserKey           string `json:"AWS_USER_KEY"`
+	AWSSecretKey         string `json:"AWS_SECRET_KEY"`
+	AWSRegion            string `json:"AWS_REGION"`
+	AWSSESSender         string `json:"AWS_SES_SENDER"`
+	AWSSESRecipient      string `json:"AWS_SES_RECIPIENT"`
+	SenderEmail          string `json:"SENDER_EMAIL"`
 }
 
 func Load() (Config, error) {

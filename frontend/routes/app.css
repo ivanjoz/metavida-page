@@ -40,10 +40,16 @@
   --input-color-bottom: rgba(109, 92, 150, 0.329);
 }
 
+html {
+  /* Reserve scrollbar space so fixed headers do not shift between short and long pages. */
+  scrollbar-gutter: stable;
+}
+
 body {
   margin: 0;
   min-width: 320px;
   overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 button,

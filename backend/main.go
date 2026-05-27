@@ -75,7 +75,7 @@ func deployTablesCommand() {
 	if err := db.DeployTables(cfg, schemas...); err != nil {
 		log.Fatal(err)
 	}
-	log.Printf("deployed %d table schemas to Cloudflare D1", len(schemas))
+	log.Printf("checked %d table schemas in Cloudflare D1", len(schemas))
 }
 
 func insertAdminCommand() {

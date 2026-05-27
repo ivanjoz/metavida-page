@@ -61,6 +61,20 @@ type TableStructInterfaceQuery[T any, E any] interface {
 type TableDeployInterface interface {
 	TableName() string
 	BuildDeploySQL() []string
+	BuildDeployPlan() tableDeployPlan
+}
+
+type tableDeployPlan struct {
+	name              string
+	columns           []columnInfo
+	primaryKeyColumns []string
+	indexes           []indexDeployPlan
+}
+
+type indexDeployPlan struct {
+	name    string
+	columns []string
+	sql     string
 }
 
 type TableInfo struct {

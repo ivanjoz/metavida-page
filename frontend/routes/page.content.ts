@@ -15,7 +15,8 @@ export const navItems = [
   { label: 'Inicio', href: '/#inicio' },
   { label: 'Quiénes somos', href: '/quienes_somos' },
   { label: 'Objetivos', href: '/objetivos' },
-  { label: 'Contactenos', href: '/#contactenos' }
+  { label: 'Contactenos', href: '/#contactenos' },
+  { label: 'Mi cuenta', href: '/client' }
 ];
 
 export const values = [

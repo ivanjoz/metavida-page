@@ -13,34 +13,52 @@
   } from 'lucide-svelte';
   import SiteHeader from './SiteHeader.svelte';
   import { posts, programs, supportActions, surveys, values } from './page.content';
+  import { POST } from '$libs/http';
 
   let contactName = $state('');
   let contactEmail = $state('');
   let contactPhone = $state('');
   let contactSubject = $state('');
   let contactMessage = $state('');
+  let isContactSubmitting = $state(false);
+  let contactSubmitError = $state('');
+  let contactSubmitSuccess = $state(false);
 
-  function submitContactForm() {
-    // Use mailto until the backend contact endpoint exists; logs make form behavior traceable in pre-alpha.
-    console.debug('Submitting public contact form', {
+  async function submitContactForm() {
+    // Submit only sanitized contact fields; the backend persists the request before sending SES email.
+    contactSubmitError = '';
+    contactSubmitSuccess = false;
+    isContactSubmitting = true;
+    console.debug('Submitting public contact form to API', {
       contactName,
       contactEmail,
       contactPhone,
       contactSubject,
       hasMessage: contactMessage.trim().length > 0
     });
-
-    const emailBody = [
-      `Nombre: ${contactName}`,
-      `Email: ${contactEmail}`,
-      `Telefono: ${contactPhone}`,
-      '',
-      contactMessage
-    ].join('\n');
-
-    const encodedSubject = encodeURIComponent(contactSubject || 'Contacto desde MetaVida');
-    const encodedBody = encodeURIComponent(emailBody);
-    window.location.href = `mailto:informes@metavida.life?subject=${encodedSubject}&body=${encodedBody}`;
+    try {
+      await POST({
+        route: '/api/p-contact-email',
+        data: {
+          name: contactName,
+          email: contactEmail,
+          phone: contactPhone,
+          subject: contactSubject,
+          message: contactMessage
+        }
+      });
+      contactName = '';
+      contactEmail = '';
+      contactPhone = '';
+      contactSubject = '';
+      contactMessage = '';
+      contactSubmitSuccess = true;
+    } catch (error) {
+      contactSubmitError = error instanceof Error ? error.message : 'No se pudo enviar el mensaje';
+      console.error('Public contact form failed', error);
+    } finally {
+      isContactSubmitting = false;
+    }
   }
 </script>
 
@@ -426,11 +444,18 @@
 
         <button
           type="submit"
-          class="inline-flex h-52 w-max items-center justify-center gap-10 rounded-[6px] bg-[#075f80] px-22 text-base font-bold text-white transition hover:bg-[#18a878]"
+          disabled={isContactSubmitting}
+          class="inline-flex h-52 w-max items-center justify-center gap-10 rounded-[6px] bg-[#075f80] px-22 text-base font-bold text-white transition hover:bg-[#18a878] disabled:cursor-not-allowed disabled:bg-[#9fb2c3]"
         >
-          Enviar
+          {isContactSubmitting ? 'Enviando' : 'Enviar'}
           <Send size={18} />
         </button>
+        {#if contactSubmitSuccess}
+          <p class="text-base font-semibold leading-[1.35] text-[#128b65]">Mensaje enviado correctamente.</p>
+        {/if}
+        {#if contactSubmitError}
+          <p class="text-base font-semibold leading-[1.35] text-[#b42318]">{contactSubmitError}</p>
+        {/if}
       </form>
     </div>
   </section>

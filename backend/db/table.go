@@ -70,6 +70,11 @@ func (t *TableStruct[T, E]) BuildDeploySQL() []string {
 	return table.deploySQL()
 }
 
+func (t *TableStruct[T, E]) BuildDeployPlan() tableDeployPlan {
+	table := compileTable[T, E](new(T))
+	return table.deployPlan()
+}
+
 func (t *TableStruct[T, E]) setQueryContext(schemaStruct any, tableInfo *TableInfo) {
 	if typed, ok := schemaStruct.(*T); ok {
 		t.schemaStruct = typed

@@ -3,11 +3,13 @@ package main
 
 import (
 	"metavida/backend/db"
+	"metavida/backend/operations"
 	"metavida/backend/security"
 )
 
 func MakeDeploySchemas() []db.TableDeployInterface {
 	return []db.TableDeployInterface{
+		db.Table[operations.UserSendedEmails](),
 		db.Table[security.User](),
 	}
 }

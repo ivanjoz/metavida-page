@@ -3,9 +3,12 @@
   import { Menu, X } from 'lucide-svelte';
   import { navItems } from '$routes/page.content';
 
+  let { forceCompact = false } = $props<{ forceCompact?: boolean }>();
+
   // Header owns mobile state so every public page gets the same navigation behavior.
   let mobileMenuOpen = $state(false);
   let compactHeader = $state(false);
+  let headerIsCompact = $derived(forceCompact || compactHeader);
 
   function syncHeaderHeight() {
     const shouldUseCompactHeader = window.scrollY > 24;
@@ -22,6 +25,12 @@
   }
 
   onMount(() => {
+    if (forceCompact) {
+      // Client pages keep the public header visible without using the tall landing-page height.
+      console.debug('Public header forced into compact mode for embedded app area');
+      return;
+    }
+
     syncHeaderHeight();
     window.addEventListener('scroll', syncHeaderHeight, { passive: true });
 
@@ -31,20 +40,20 @@
 
 <header
   class="fixed inset-x-0 top-0 z-40 border-b border-white/20 bg-[#0b2246]/82 backdrop-blur-md transition-[background-color,box-shadow] duration-300 ease-out"
-  class:shadow-[0_12px_34px_rgba(4,19,44,0.2)]={compactHeader}
+  class:shadow-[0_12px_34px_rgba(4,19,44,0.2)]={headerIsCompact}
 >
   <div
     class="mx-auto flex w-[min(1180px,calc(100%-32px))] items-center justify-between transition-[height] duration-300 ease-out"
-    class:h-82={!compactHeader}
-    class:h-62={compactHeader}
+    class:h-82={!headerIsCompact}
+    class:h-62={headerIsCompact}
   >
     <a href="/" class="flex items-center gap-12" aria-label="MetaVida inicio">
       <img
         src="/images/metavida/logo.svg"
         alt="MetaVida"
         class="w-auto max-w-[178px] transition-[height] duration-300 ease-out"
-        class:h-46={!compactHeader}
-        class:h-34={compactHeader}
+        class:h-46={!headerIsCompact}
+        class:h-34={headerIsCompact}
       />
     </a>
 
@@ -62,8 +71,8 @@
 
     <button
       class="grid w-42 place-items-center rounded-[6px] border border-white/30 text-white transition-[height] duration-300 ease-out md:hidden"
-      class:h-42={!compactHeader}
-      class:h-36={compactHeader}
+      class:h-42={!headerIsCompact}
+      class:h-36={headerIsCompact}
       type="button"
       aria-label="Abrir menu"
       onclick={() => (mobileMenuOpen = !mobileMenuOpen)}
