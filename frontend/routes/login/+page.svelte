@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { base } from '$app/paths';
   import Input from '$components/form/Input.svelte';
   import Button from '$components/buttons/Button.svelte';
   import { Notify } from '$libs/helpers';
@@ -10,7 +11,7 @@
 
   onMount(() => {
     if (checkIsLogin() === 2) {
-      window.location.href = '/admin';
+      window.location.href = `${base}/admin`;
     }
   });
 
@@ -38,7 +39,7 @@
       }
 
       Env.setSession(body.UserToken, body.TokenExpTime, body.UserInfo || '');
-      window.location.href = '/admin';
+      window.location.href = `${base}/admin`;
     } catch {
       Notify.failure('Error de conexión. Intente nuevamente.');
     } finally {
@@ -51,8 +52,8 @@
   <div class="login-box">
     <div class="login-tt">Iniciar Sesión</div>
 
-    <a class="login-brand" href="/">
-      <img src="/images/metavida/logo.svg" alt="Metavida" />
+    <a class="login-brand" href={`${base}/`}>
+      <img src={`${base}/images/metavida/logo.svg`} alt="Metavida" />
     </a>
 
     <Input

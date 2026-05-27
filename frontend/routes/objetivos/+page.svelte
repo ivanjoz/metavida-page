@@ -11,6 +11,7 @@
     Megaphone,
     UsersRound
   } from 'lucide-svelte';
+  import { base } from '$app/paths';
   import SiteHeader from '../SiteHeader.svelte';
 
   // Objectives are copied from the archived WordPress accordion and rendered as scan-friendly cards.
@@ -80,7 +81,7 @@
   <SiteHeader />
 
   <section class="relative isolate overflow-hidden bg-[#0b2246] pt-82 text-white">
-    <img src="/images/metavida/prevencion-890x660.jpg" alt="" class="absolute inset-0 -z-20 h-full w-full object-cover opacity-42" />
+    <img src={`${base}/images/metavida/prevencion-890x660.jpg`} alt="" class="absolute inset-0 -z-20 h-full w-full object-cover opacity-42" />
     <div class="absolute inset-0 -z-10 bg-[linear-gradient(115deg,rgba(7,25,56,0.97),rgba(7,67,91,0.84)_60%,rgba(24,198,130,0.34))]"></div>
 
     <div class="mx-auto grid min-h-[520px] w-[min(1180px,calc(100%-32px))] content-end py-78">

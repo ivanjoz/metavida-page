@@ -11,6 +11,7 @@
     ShieldCheck,
     UsersRound
   } from 'lucide-svelte';
+  import { base } from '$app/paths';
   import SiteHeader from './SiteHeader.svelte';
   import { posts, programs, supportActions, surveys, values } from './page.content';
   import { POST } from '$libs/http';
@@ -78,7 +79,7 @@
     class="relative flex min-h-[760px] items-center overflow-hidden bg-[#0b2246] pt-82 text-white md:min-h-[820px]"
   >
     <img
-      src="/images/metavida_fondo.avif"
+      src={`${base}/images/metavida_fondo.avif`}
       alt=""
       class="absolute inset-0 h-full w-full object-cover opacity-78"
     />
@@ -180,7 +181,7 @@
       </div>
 
       <img
-        src="/images/metavida/encuesta_paciente.jpg"
+        src={`${base}/images/metavida/encuesta_paciente.jpg`}
         alt="Equipo de salud acompañando a pacientes"
         class="min-h-360 w-full rounded-[8px] object-cover shadow-[0_22px_58px_rgba(21,72,128,0.12)]"
       />
@@ -464,7 +465,7 @@
     <div class="mx-auto flex w-[min(1180px,calc(100%-32px))] flex-col gap-16 text-sm text-white/72 md:flex-row md:items-center md:justify-between">
       <p>Copyright © 2026 MetaVida. All Rights Reserved.</p>
       <div class="flex gap-18">
-        <a class="hover:text-white" href="/admin">Admin</a>
+        <a class="hover:text-white" href={`${base}/admin`}>Admin</a>
         <a class="hover:text-white" href="https://www.metavida.life/mision/">Mision</a>
       </div>
     </div>

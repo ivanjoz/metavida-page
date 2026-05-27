@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { base } from '$app/paths';
   import { Menu, X } from 'lucide-svelte';
   import { navItems } from '$routes/page.content';
 
@@ -47,9 +48,9 @@
     class:h-82={!headerIsCompact}
     class:h-62={headerIsCompact}
   >
-    <a href="/" class="flex items-center gap-12" aria-label="MetaVida inicio">
+    <a href={`${base}/`} class="flex items-center gap-12" aria-label="MetaVida inicio">
       <img
-        src="/images/metavida/logo.svg"
+        src={`${base}/images/metavida/logo.svg`}
         alt="MetaVida"
         class="w-auto max-w-[178px] transition-[height] duration-300 ease-out"
         class:h-46={!headerIsCompact}

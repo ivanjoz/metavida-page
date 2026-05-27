@@ -1,15 +1,16 @@
 <script lang="ts">
   import { page } from '$app/state';
+  import { base } from '$app/paths';
   import { ClipboardList, Settings } from 'lucide-svelte';
 
   const clientMenuItems = [
-    { label: 'Mis Consultas', href: '/client', icon: ClipboardList },
-    { label: 'Configuración', href: '/client/configuracion', icon: Settings }
+    { label: 'Mis Consultas', path: '/client', href: `${base}/client`, icon: ClipboardList },
+    { label: 'Configuración', path: '/client/configuracion', href: `${base}/client/configuracion`, icon: Settings }
   ];
 
-  function isCurrentClientSection(href: string) {
+  function isCurrentClientSection(path: string) {
     // Match the exact client landing route separately so nested pages do not highlight two entries.
-    return href === '/client' ? page.url.pathname === href : page.url.pathname.startsWith(href);
+    return path === '/client' ? page.url.pathname === `${base}${path}` : page.url.pathname.startsWith(`${base}${path}`);
   }
 
   function logClientNavigation(label: string, href: string) {
@@ -26,7 +27,7 @@
   <nav class="client-menu__nav" aria-label="Menu de cliente">
     {#each clientMenuItems as item}
       {@const Icon = item.icon}
-      {@const active = isCurrentClientSection(item.href)}
+      {@const active = isCurrentClientSection(item.path)}
       <a
         class="text-sm font-semibold leading-[1.2]"
         class:active

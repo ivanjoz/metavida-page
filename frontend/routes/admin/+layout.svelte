@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { base } from '$app/paths';
   import { Home, Settings, Users } from 'lucide-svelte';
   import Button from '$components/buttons/Button.svelte';
   import { checkIsLogin, Env } from '$core/env';
@@ -8,14 +9,14 @@
   let ready = $state(false);
 
   const nav = [
-    { href: '/admin', label: 'Panel', icon: Home },
-    { href: '/admin/leads', label: 'Leads', icon: Users },
-    { href: '/admin/settings', label: 'Ajustes', icon: Settings }
+    { href: `${base}/admin`, label: 'Panel', icon: Home },
+    { href: `${base}/admin/leads`, label: 'Leads', icon: Users },
+    { href: `${base}/admin/settings`, label: 'Ajustes', icon: Settings }
   ];
 
   onMount(() => {
     if (checkIsLogin() !== 2) {
-      window.location.href = '/login';
+      window.location.href = `${base}/login`;
       return;
     }
     ready = true;
@@ -25,7 +26,7 @@
 {#if ready}
 <div class="admin-layout">
   <aside class="admin-sidebar">
-    <a class="brand" href="/">Metavida</a>
+    <a class="brand" href={`${base}/`}>Metavida</a>
     <nav>
       {#each nav as item}
         {@const Icon = item.icon}

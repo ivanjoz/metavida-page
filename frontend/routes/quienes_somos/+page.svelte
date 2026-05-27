@@ -9,6 +9,7 @@
     Sprout,
     UsersRound
   } from 'lucide-svelte';
+  import { base } from '$app/paths';
   import SiteHeader from '../SiteHeader.svelte';
 
   // Keep the old-page mission goals as data so the markup stays focused on layout.
@@ -60,7 +61,7 @@
   <SiteHeader />
 
   <section class="relative isolate overflow-hidden bg-[#0b2246] pt-82 text-white">
-    <img src="/images/metavida_fondo.avif" alt="" class="absolute inset-0 -z-20 h-full w-full object-cover opacity-55" />
+    <img src={`${base}/images/metavida_fondo.avif`} alt="" class="absolute inset-0 -z-20 h-full w-full object-cover opacity-55" />
     <div class="absolute inset-0 -z-10 bg-[linear-gradient(110deg,rgba(7,25,56,0.96),rgba(7,59,91,0.78)_58%,rgba(16,125,143,0.44))]"></div>
 
     <div class="mx-auto grid min-h-[520px] w-[min(1180px,calc(100%-32px))] content-end py-78">
@@ -82,7 +83,7 @@
     <div class="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-42 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
       <div class="relative">
         <img
-          src="/images/metavida/mision.png"
+          src={`${base}/images/metavida/mision.png`}
           alt="Representación visual de la misión de MetaVida"
           class="aspect-square w-full rounded-[8px] object-cover shadow-[0_26px_70px_rgba(21,72,128,0.14)]"
         />
@@ -146,7 +147,7 @@
       </article>
 
       <img
-        src="/images/metavida/vision.png"
+        src={`${base}/images/metavida/vision.png`}
         alt="Representación visual de la visión de MetaVida"
         class="order-1 aspect-square w-full rounded-[8px] object-cover shadow-[0_26px_70px_rgba(21,72,128,0.14)] lg:order-2"
       />
