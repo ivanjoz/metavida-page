@@ -13,7 +13,10 @@ echo "Seleccione acciones a realizar (ej: '12'):"
 echo "[1] Generar schemas.generated.go"
 echo "[2] Desplegar tablas e índices en Cloudflare D1"
 echo "[3] Actualizar ui-components y libs desde Genix"
+echo "[4] Backend (VPS)"
+echo "[5] Build frontend estático a /docs (GitHub Pages)"
 echo "[6] Desplegar tablas e insertar usuario admin inicial"
+echo "[7] Configurar servicio backend en VPS"
 read -r ACCIONES
 
 if [[ "$ACCIONES" == *"3"* ]]; then
@@ -55,6 +58,32 @@ if [[ "$ACCIONES" == *"3"* ]]; then
         | tar -x --strip-components=1 -C frontend
     git -C "$GENIX_REPO" rev-parse HEAD > frontend/ui-components/GENIX_COMMIT
     echo "Componentes actualizados desde Genix commit: $(cat frontend/ui-components/GENIX_COMMIT)"
+fi
+
+if [[ "$ACCIONES" == *"5"* ]]; then
+    echo "=== BUILD FRONTEND ESTÁTICO -> /docs ==="
+    (
+        cd frontend
+        bun install
+        bun run build:docs
+    )
+    echo "✅ Build estático listo en /docs (commit y push para publicar en GitHub Pages)."
+fi
+
+if [[ "$ACCIONES" == *"4"* ]]; then
+    echo "=== PUBLICANDO BACKEND (VPS) ==="
+    cd ./scripts
+    "$GO_PATH" run . deploy_vps
+    cd ..
+    echo "✅ El deploy VPS finalizado!"
+fi
+
+if [[ "$ACCIONES" == *"7"* ]]; then
+    echo "=== CONFIGURANDO SERVICIO BACKEND (VPS) ==="
+    cd ./scripts
+    "$GO_PATH" run . configure_server
+    cd ..
+    echo "✅ La configuración VPS finalizó!"
 fi
 
 if [[ "$ACCIONES" == *"1"* || "$ACCIONES" == *"2"* || "$ACCIONES" == *"6"* ]]; then

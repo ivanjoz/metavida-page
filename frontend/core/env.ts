@@ -2,9 +2,23 @@ import { browser } from '$app/environment';
 
 export { browser };
 
+// Injected by vite (define) from credentials.json "ENPOINT" at build time.
+declare const __PROD_API_BASE__: string;
+
 const TOKEN_KEY = 'metavida-token';
 const TOKEN_EXP_KEY = 'metavida-token-exp';
 const USER_KEY = 'metavida-user';
+
+const LOCAL_API_BASE = 'http://localhost:14447';
+const PROD_API_BASE = (typeof __PROD_API_BASE__ !== 'undefined' && __PROD_API_BASE__)
+  || import.meta.env.VITE_API_BASE
+
+const isLocalHost = browser && /^(localhost|127\.0\.0\.1|\[?::1\]?)$/.test(window.location.hostname);
+
+// Use the local backend only when actually served from localhost; everything
+// else (deployed site, LAN-accessed dev server) hits the production endpoint.
+// Trailing slashes are trimmed so makeAbsoluteRoute doesn't produce `//`.
+const resolveApiBase = () => (isLocalHost ? LOCAL_API_BASE : PROD_API_BASE).replace(/\/+$/, '');
 
 const makeAbsoluteRoute = (baseRoute: string, route: string) => {
   // Normalize app-relative API paths so shared Genix helpers can call one route builder.
@@ -27,7 +41,7 @@ export const checkIsLogin = (): number => {
 };
 
 export const Env = {
-  apiBase: import.meta.env.VITE_API_BASE || 'http://localhost:3591',
+  apiBase: resolveApiBase(),
   CDN_URL: import.meta.env.VITE_CDN_URL || '',
   serviceWorker: '/sw.js',
   enviroment: 'metavida',
